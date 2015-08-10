@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+		"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+		"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+    	<property name="hibernate.dialect">${db.dialect}</property>
+        <property name="hibernate.connection.driver_class">${db.driverClass}</property>
+        <property name="hibernate.connection.username">${db.username}</property>
+        <property name="hibernate.connection.password">${db.password}</property>
+        <property name="hibernate.connection.url">${db.connectionURL}</property>
+        <property name="show_sql">true</property>
+    	<property name="format_sql">true</property>
+        <property name="hibernate.current_session_context_class">thread</property>
+
+        <property name="hibernate.cache.use_second_level_cache">true</property> 
+        <property name="hibernate.cache.use_query_cache">true</property> 
+        <property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</property>
+    	
+        <mapping class="com.dandy.core.Person"/>
+        <mapping class="com.dandy.core.Address"/>
+        <mapping class="com.dandy.core.Contact"/>
+        <mapping class="com.dandy.core.Role"/>
+    </session-factory>
+</hibernate-configuration>

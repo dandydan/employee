@@ -1,0 +1,1 @@
+ALTER TABLE person ALTER COLUMN gender TYPE INT USING (gender::INT);
