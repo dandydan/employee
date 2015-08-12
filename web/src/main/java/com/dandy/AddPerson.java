@@ -11,6 +11,10 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.annotation.WebServlet;
 
 import com.dandy.core.Gender;
+import com.dandy.core.Person;
+import com.dandy.core.Address;
+import com.dandy.core.PersonService;
+
 
 @WebServlet("/addPerson")
 public class AddPerson extends HttpServlet {
@@ -21,27 +25,74 @@ public class AddPerson extends HttpServlet {
                       throws ServletException, IOException {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
+        Display display = new Display();
         out.println("<!DOCTYPE html>");
         out.println("<html>");
-        out.println("<head><meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>");
+        out.println("<head><meta http-equiv='Content-Type'" + 
+                    "content='text/html; charset=UTF-8'>");
         out.println("<title>Servlet Activity</title></head><body>");
         out.println("<h1 align=\"center\">Servlet Activity</h1>");
         out.println("<table>");
-        out.println("<form name=\"editForm\" method=\"post\" action=\"edit\">");
-        out.println("<tr><tr><td>Title: </td><td><input type=\"text\" name=\"firstname\" value=\"\"/></td></tr>");
-        out.println("<tr><td>Firstname: </td><td><input type=\"text\" name=\"firstname\" value=\"\"/></td></tr>");
-        out.println("<tr><td>Middlename: </td><td><input type=\"text\" name=\"middlename\" value=\"\"/></td></tr>");
-        out.println("<tr><td>Lastname: </td><td><input type=\"text\" name=\"lastname\" value=\"\"/></td></tr>");
-        out.println("<tr><td>Suffix: </td><td><input type=\"text\" name=\"suffix\" value=\"\"/></td></tr>");
-        out.println("<tr><td>Birthday: </td><td><input type=\"text\" name=\"birthday\" value=\"\"/></td></tr>");
-        out.println("<tr><td>Employed: </td><td><input type=\"radio\" name=\"employed\" value=\"true\" />True");
-        out.println("<input type=\"radio\" name=\"employed\" value=\"false\" />False</td></tr>");
-        out.println("<tr><td>GWA: </td><td><input type=\"text\" name=\"gwa\" value=\"\"/></td></tr>");
-        out.println("<tr><td>Gender: </td><td><input type=\"radio\" name=\"gender\" value=\""+Gender.Male+"\" />Male");
-        out.println("<input type=\"radio\" name=\"gender\" value=\""+Gender.Female+"\" />Female");
-        out.println("<input type=\"radio\" name=\"gender\" value=\""+Gender.Undecided+"\" />Undecided</td></tr>");
-        out.println("<tr><td></td><td><input type=\"submit\" value=\"Add\"/></td></tr></form>");
+        out.println("<form name=\"saveForm\" method=\"post\" action=\"addPerson\">");
+        display.paramInputs(request, out);
+        out.println("<tr><td><input type=\"submit\" " +
+                    "value=\"Save\"/></td>");
+        out.println("</form>");
+        out.println("<td><button onclick=\"location.href = " +
+                    "'http://localhost:8080/';\">Home</button></td></tr>");
         out.println("</table");
         out.println("</body></html>");
     }
+
+    @Override
+    protected void doPost(HttpServletRequest request,
+                      HttpServletResponse response)
+                      throws ServletException, IOException {
+        PrintWriter out = response.getWriter();
+        InputValidator inputValidator = new InputValidator();
+        String title = (String) request.getParameter("title");
+        String firstname = (String) request.getParameter("firstname");
+        String middlename = (String) request.getParameter("middlename");
+        String lastname = (String) request.getParameter("lastname");
+        String suffix = (String) request.getParameter("suffix");
+        String birthday = (String) request.getParameter("birthday");
+        Boolean employed = Boolean.valueOf(request.getParameter("employed"));
+        Float gwa = Float.valueOf(request.getParameter("gwa"));
+        Integer gender = Integer.valueOf(request.getParameter("gender"));
+        Integer stNo = Integer.valueOf(request.getParameter("stNo"));
+        String brgy = (String) request.getParameter("brgy");
+        String subdivision = (String) request.getParameter("subdivision");
+        String city = (String) request.getParameter("city");
+        Integer zipcode = Integer.valueOf(request.getParameter("zipcode"));
+        
+
+        PersonService personService = new PersonService();
+        Person person = new Person();        
+        person.setTitle(title);
+        person.setFirstName(firstname);
+        person.setMiddleName(middlename);
+        person.setLastName(lastname);
+        person.setSuffix(suffix);
+        person.setBirthday(inputValidator.dateFormatter(birthday));
+	    person.setEmployed(employed);
+	    person.setGwa(gwa);
+        person.setGender(inputValidator.genderProcess(gender));
+
+        Address address = new Address();
+
+        address.setStNo(stNo);
+        address.setBrgy(brgy);
+        address.setSubdivision(subdivision);
+        address.setCity(city); 
+        address.setZipcode(zipcode);
+
+        person.setAddress(address);
+        address.setPerson(person);
+        personService.addPerson(person);
+        request.setAttribute("person", person);
+        //doGet(request, response);
+        
+        response.sendRedirect("/");
+    }
+    
 }

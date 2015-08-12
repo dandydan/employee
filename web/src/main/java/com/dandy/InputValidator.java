@@ -33,14 +33,12 @@ public class InputValidator {
     }
     
     
-    public Date dateFormatter() {
+    public Date dateFormatter(String date) {
         DateValidator validator = DateValidator.getInstance();
         SimpleDateFormat inputFormat = new SimpleDateFormat("MM-dd-yyyy");
         SimpleDateFormat sqlFormat = new SimpleDateFormat("yyyy-MM-dd");
         boolean valid = false;
         Date javaDate = null;
-        do {
-            String date = scanner.next();
             valid = validator.isValid(date, "MM-dd-yyyy");
             if (valid) {
                 try {
@@ -58,7 +56,6 @@ public class InputValidator {
             } else {
                 System.out.println("Wrong format");
             }
-        }while(!valid);
 	return javaDate;
     }
 
@@ -78,31 +75,19 @@ public class InputValidator {
         return input;
     }
 
-    public Gender genderProcess() {
+    public Gender genderProcess(Integer choice) {
         Gender gender = Gender.Male;
-        int choice;
-        boolean run = true;
-        do {
-            System.out.print("1. Male \t2. Female \t3. Undecided");
-            choice = integerChecker();
             switch (choice) {
                 case 1:
            	    gender = Gender.Male;
-                    run = false;
                     break;
                 case 2:
            	    gender = Gender.Female;
-                    run = false;
                     break;
                 case 3:
            	    gender = Gender.Undecided;
-                    run = false;
                     break;
-                default:
-		    System.out.println("Please choose 1, 2 or 3 :");
-		    break;
             }
-        }while(run);
         return gender;
     }
 
