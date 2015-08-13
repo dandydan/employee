@@ -22,16 +22,13 @@ class PersonDao {
     GetCommand             getCommand;
     GetListCommand     getListCommand;
     GetPersonDTOList getPersonDTOList;
+    boolean flags = true;
 
-    private Session getSession() {
-        Session sess = HibernateUtil.getSessionFactory().getCurrentSession();
-	    return sess;
-    }
-
-    public void updatePerson(Person person){
+    public boolean updatePerson(Person person){
         updateCommand  = new UpdateCommand(person);
         commandInvoker = new CommandInvoker(updateCommand);
         execute(commandInvoker);
+        return flags;
     }
 
     public void removeContacts(Person person) {
@@ -47,10 +44,11 @@ class PersonDao {
         execute(commandInvoker);
     }
 
-    public void addPerson(Person person){
+    public boolean addPerson(Person person){
         saveCommand    = new SaveCommand(person);
         commandInvoker = new CommandInvoker(saveCommand);
         execute(commandInvoker);
+        return flags;
     }
 
     public Person getPersonById(int personId) {
@@ -64,8 +62,8 @@ class PersonDao {
     public List<PersonDTO> getPersons(String field, String searchText, String order) {
         List<PersonDTO> personDTOs = new ArrayList<PersonDTO>();
         getPersonDTOList = new GetPersonDTOList(field, searchText, order);
-        commandInvoker   = new CommandInvoker(getPersonDTOList);
-        execute(commandInvoker);
+        CommandInvoker commandInvoke   = new CommandInvoker(getPersonDTOList);
+        execute(commandInvoke);
         personDTOs = getPersonDTOList.getDTOList();
         return personDTOs;
     }
@@ -80,12 +78,16 @@ class PersonDao {
     }
 
     void execute(CommandInvoker command) {
+        Session sess = HibernateUtil.getSessionFactory().openSession();
         try {
-            getSession().beginTransaction();
-            command.invoke(getSession());
-            getSession().getTransaction().commit();
+            sess.beginTransaction();
+            command.invoke(sess);
+            sess.getTransaction().commit();
         } catch (HibernateException e) {
-            getSession().getTransaction().rollback();
+            sess.getTransaction().rollback();
+            flags = false;
+        }finally{
+            sess.close();
         }
     }
 

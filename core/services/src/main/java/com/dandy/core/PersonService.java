@@ -5,14 +5,14 @@ import java.util.List;
 public class PersonService {
     private PersonDao personDao;
 
-    public void addPerson(Person person) {
+    public boolean addPerson(Person person) {
         personDao = new PersonDao();
-        personDao.addPerson(person);
+        return personDao.addPerson(person);
     }
 
-    public void updatePerson(Person person){
+    public boolean updatePerson(Person person){
         personDao = new PersonDao();
-        personDao.updatePerson(person);
+        return personDao.updatePerson(person);
     }
     
     public Person getPersonById(int personId){
@@ -33,12 +33,6 @@ public class PersonService {
 
     public List<PersonDTO> getPersons(String field, String searchText, String order) {
         personDao = new PersonDao();
-        List<PersonDTO> result = personDao.getPersons(field, searchText, order);
-        return result;
-    }
-
-    public List<Person> getPersonList() {
-        personDao = new PersonDao();
-        return personDao.getPersonList();
+        return personDao.getPersons(field, searchText, order);
     }
 }

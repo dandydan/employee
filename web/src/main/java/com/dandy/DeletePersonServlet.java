@@ -23,6 +23,6 @@ public class DeletePersonServlet extends HttpServlet {
         PersonService personService = new PersonService();
         Person person = personService.getPersonById(Integer.valueOf(request.getParameter("personId")));
         personService.removePerson(person);
-        response.sendRedirect("/");
+        response.sendRedirect("/home");
     }
 }

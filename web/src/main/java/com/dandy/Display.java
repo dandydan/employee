@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Collections;
+import java.util.Date;
 
 public class Display {
 
@@ -49,7 +50,7 @@ public class Display {
                     "value=\""+valueCheck(person.getSuffix())+"\"/></td></tr>");
         out.println("<tr><td>Birthday: </td>");
         out.println("<td><input type=\"text\" name=\"birthday\" " +
-                    "value=\""+person.getBirthday()+"\" maxlength=\"10\" placeholder=\"MM-DD-YYYY\"/></td></tr>");
+                    "value=\""+dateCheck(person.getBirthday())+"\" maxlength=\"10\" placeholder=\"MM-DD-YYYY\"/></td></tr>");
         out.println("<tr><td>Employed: </td>");
         out.println("<td><input type=\"radio\" name=\"employed\" " +
                     "value=\"true\" checked=\"checked\"/>True");
@@ -57,7 +58,7 @@ public class Display {
                     "value=\"false\" />False</td></tr>");
         out.println("<tr><td>GWA: </td>");
         out.println("<td><input type=\"text\" name=\"gwa\" " +
-                    "value=\""+person.getGwa()+"\"/></td></tr>");
+                    "value=\""+floatDisplay(person.getGwa())+"\"/></td></tr>");
         out.println("<tr><td>Gender: </td>");
         out.println("<td><input type=\"radio\" name=\"gender\" " +
                     "value=\"0\" checked=\"checked\"/>Male");
@@ -67,7 +68,7 @@ public class Display {
                     "value=\"2\" />Undecided</td></tr>");
         out.println("<tr><td>Street No.: </td>");
         out.println("<td><input type=\"text\" name=\"stNo\" " +
-                    "value=\""+person.getAddress().getStNo()+"\"/></td></tr>");
+                    "value=\""+intDisplay(person.getAddress().getStNo())+"\"/></td></tr>");
         out.println("<tr><td>Brgy: </td>");
         out.println("<td><input type=\"text\" name=\"brgy\" " +
                     "value=\""+valueCheck(person.getAddress().getBrgy())+"\"/></td></tr>");
@@ -79,13 +80,13 @@ public class Display {
                     "value=\""+valueCheck(person.getAddress().getCity())+"\"/></td></tr>");
         out.println("<tr><td>Zipcode: </td>");
         out.println("<td><input type=\"text\" name=\"zipcode\" " +
-                    "value=\""+person.getAddress().getZipcode()+"\"/></td></tr>");
+                    "value=\""+intDisplay(person.getAddress().getZipcode())+"\"/></td></tr>");
     }
 
 
 
     public void printPerson(PrintWriter out, String field, String searchText, String order) {
-    PersonService personService;
+        PersonService personService;
         InputValidator inputValidator = new InputValidator();
         personService = new PersonService();
 
@@ -175,6 +176,31 @@ public class Display {
             return value;
         } else {
             return "";
+        }
+    }
+
+    public String dateCheck(Date date) {
+        InputValidator inputValidator = new InputValidator();
+        if(date!=null) {
+            return inputValidator.dateDisplay(date);
+        } else {
+            return "";
+        }
+    }
+
+    public String intDisplay(int number) {
+        if(number == 0) {
+            return "";
+        } else {
+            return ""+number+"";
+        }
+    }
+
+    public String floatDisplay(float floatNumber) {
+        if(floatNumber == 0.0) {
+            return "";
+        } else {
+            return ""+floatNumber+"";
         }
     }
 }

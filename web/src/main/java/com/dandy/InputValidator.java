@@ -6,26 +6,118 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import com.dandy.core.Gender;
+import com.dandy.core.Person;
 import org.apache.commons.validator.routines.DateValidator;
 import org.apache.commons.validator.routines.FloatValidator;
+import org.apache.commons.validator.routines.IntegerValidator;
+import javax.servlet.http.HttpServletRequest;
 
 public class InputValidator {
 
     Scanner scanner = new Scanner(System.in);
+    FloatValidator floatValidator;
 
-    public int integerChecker() {
-        int number = -1;
-        do {
-            try {
-                number = scanner.nextInt();
-            } catch (InputMismatchException e) {
-                System.out.println("Must be a number");
-            }finally{
-                scanner.nextLine();
-            }
-        } while (number < 0);
-        return number;
+
+    public float gwaChecker(String floatString) {
+        floatValidator = new FloatValidator();
+        boolean valid = false;
+        float input = floatCheck(floatString);
+        if (floatValidator.isInRange(input, 1.0, 5.0)) {
+            return input;
+        } else {
+            return (float)0.0;
+        }
     }
+
+    private float floatCheck(String floatString) {
+        floatValidator = new FloatValidator();
+        Float result = null;
+        if((result=floatValidator.validate(floatString)) != null) {
+            return (float)result;
+        } else {
+            return (float) 0.0;
+        }
+    }
+
+    public int integerChecker(String intString) {
+        IntegerValidator integerValidator = new IntegerValidator();
+        Integer integer = null;
+        if ((integer=integerValidator.validate(intString)) != null) {
+            return (int) integer;
+        } else {
+            return 0;
+        }
+    }
+
+
+    public String dateDisplay(Date date) {
+        String sqlString = new SimpleDateFormat("MM-dd-yyyy").format(date);
+        return sqlString;
+    }
+
+    public Person personCheck(HttpServletRequest request, Person person) {
+        String title = (String) request.getParameter("title");
+        String firstname = (String) request.getParameter("firstname");
+        String middlename = (String) request.getParameter("middlename");
+        String lastname = (String) request.getParameter("lastname");
+        String suffix = (String) request.getParameter("suffix");
+        String birthday = (String) request.getParameter("birthday");
+        Boolean employed = Boolean.valueOf(request.getParameter("employed"));
+        String gwa = (String)request.getParameter("gwa");
+        String gender = (String) request.getParameter("gender");
+        String stNo = (String) request.getParameter("stNo");
+        String brgy = (String) request.getParameter("brgy");
+        String subdivision = (String) request.getParameter("subdivision");
+        String city = (String) request.getParameter("city");
+        String zipcode = (String) request.getParameter("zipcode");
+
+        person.setTitle(title);
+        person.setFirstName(firstname);
+        person.setMiddleName(middlename);
+        person.setLastName(lastname);
+        person.setSuffix(suffix);
+        person.setBirthday(dateFormatter(birthday));
+	    person.setEmployed(employed);
+	    person.setGwa(gwaChecker(gwa));
+        person.setGender(genderProcess(integerChecker(gender)));
+
+        person.getAddress().setStNo(integerChecker(stNo));
+        person.getAddress().setBrgy(brgy);
+        person.getAddress().setSubdivision(subdivision);
+        person.getAddress().setCity(city); 
+        person.getAddress().setZipcode(integerChecker(zipcode));
+
+        return person;
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public String simpleString() {
         String text = scanner.nextLine();
@@ -59,21 +151,6 @@ public class InputValidator {
 	return javaDate;
     }
 
-    public float gwaChecker() {
-        FloatValidator floatValidator = new FloatValidator();
-        boolean valid = false;
-        float input = (float)0.0;
-        do {
-            try {
-                input = scanner.nextFloat();
-                valid = floatValidator.isInRange(input, 1.0, 5.0);
-            } catch (InputMismatchException e) {
-                System.out.println("1.0 to 5.0 only");
-                scanner.nextLine();
-            }
-        } while (!valid);
-        return input;
-    }
 
     public Gender genderProcess(Integer choice) {
         Gender gender = Gender.Male;
@@ -92,7 +169,7 @@ public class InputValidator {
     }
 
 
-    public boolean employmentProcess() {
+  /*  public boolean employmentProcess() {
         boolean employed = true;
         int choice;
         boolean run = true;
@@ -115,16 +192,15 @@ public class InputValidator {
             }
         }while(run);
         return employed;
-    }
+    }*/
 
     public String contactDescriptor() {
         String contactDescription="";
-        int choice;
+        int choice =    1;
         boolean run = true;
         do {
             System.out.print("1. Telephone");
             System.out.println("\t2. Cellphone");
-            choice = integerChecker();
             switch (choice) {
                 case 1:
            	    contactDescription = "Telephone";
@@ -155,8 +231,5 @@ public class InputValidator {
         return number;
     }
     
-    public String dateDisplay(Date date) {
-        String sqlString = new SimpleDateFormat("MM-dd-yyyy").format(date);
-        return sqlString;
-    }
+
 }

@@ -26,5 +26,6 @@ public class HomeServlet extends HttpServlet {
 
         display.printPerson(out, "", "", "personId");
         out.println("</body></html>");
+        out.close();
     }
 }

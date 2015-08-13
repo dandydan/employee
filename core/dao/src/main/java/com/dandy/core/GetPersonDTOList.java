@@ -31,7 +31,7 @@ public class GetPersonDTOList implements DbCommand {
         crit.createAlias("contacts", "contacts", Criteria.LEFT_JOIN);
         crit.createAlias("roles", "roles", Criteria.LEFT_JOIN);
         crit.createAlias("address", "address");
-        crit.setProjection(Projections.distinct(Projections.projectionList()
+        crit.setProjection(Projections.projectionList()
                            .add( Projections.property("person.personId"), "personId")
                            .add( Projections.property("person.firstName"), "firstName")
                            .add( Projections.property("person.lastName"), "lastName")
@@ -39,7 +39,7 @@ public class GetPersonDTOList implements DbCommand {
                            .add( Projections.property("address.zipcode"), "zipcode")
                            .add( Projections.property("person.birthday"), "birthday")
                            .add( Projections.property("contacts.number"), "number")
-                           .add( Projections.property("roles.pos"),"pos")));
+                           .add( Projections.property("roles.pos"),"pos"));
         crit.setResultTransformer(Transformers.aliasToBean(PersonDTO.class));
         if(field != "") {
             crit.add(Restrictions.ilike(field, searchText, MatchMode.ANYWHERE));
