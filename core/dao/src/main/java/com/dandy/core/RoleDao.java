@@ -13,11 +13,6 @@ class RoleDao {
     CommandInvoker commandInvoker;
     GetListCommand getListCommand;
 
-    private Session getSession() {
-        Session sess = HibernateUtil.getSessionFactory().getCurrentSession();
-	    return sess;
-    }
-
     public List<Role> getRoles() {
         List<Role> roles = new ArrayList<Role>();
         getListCommand = new GetListCommand(Role.class);
@@ -29,14 +24,15 @@ class RoleDao {
 
     void execute(CommandInvoker command) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session sess = HibernateUtil.getSessionFactory().openSession();
         Statistics stats = sessionFactory.getStatistics();
         stats.setStatisticsEnabled(true);
         try {
-            getSession().beginTransaction();
-            command.invoke(getSession());
-            getSession().getTransaction().commit();
+            sess.beginTransaction();
+            command.invoke(sess);
+            sess.getTransaction().commit();
         } catch (HibernateException e) {
-            getSession().getTransaction().rollback();
+            sess.getTransaction().rollback();
         }
         System.out.println("Level 2 cache hits: " + stats.getSecondLevelCacheHitCount());
     }

@@ -29,19 +29,14 @@ public class EditPersonServlet extends HttpServlet {
         out.println("<html>");
         out.println("<head><meta http-equiv='Content-Type'" + 
                     "content='text/html; charset=UTF-8'>");
+        request.setAttribute("action" , "Update");
         out.println("<title>Servlet Activity</title></head><body>");
         out.println("<h1 align=\"center\">Servlet Activity</h1>");
         out.println("<table>");
         out.println("<form name=\"editForm\" method=\"post\" action=\"editPerson\">");
-        display.paramInputs(request, out);
         out.println("<input type=\"hidden\" name=\"fromGet\" value=\"true\">");
         out.println("<input type=\"hidden\" name=\"personId\" value=\""+request.getAttribute("personId")+"\">");
-        out.println("<tr><td><input type=\"submit\" " +
-                    "value=\"Save\"/></td>");
-        out.println("</form>");
-        out.println("<td><button onclick=\"location.href = " +
-                    "'http://localhost:8080/home';\">Home</button></td></tr>");
-        out.println("</table");
+        display.paramInputs(request, out);
         out.println("</body></html>");
     }
 

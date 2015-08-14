@@ -81,6 +81,33 @@ public class Display {
         out.println("<tr><td>Zipcode: </td>");
         out.println("<td><input type=\"text\" name=\"zipcode\" " +
                     "value=\""+intDisplay(person.getAddress().getZipcode())+"\"/></td></tr>");
+
+        out.println("<tr><td>Role:</td>");
+        out.println("<td><input type=\"checkbox\" name=\"role\" value=\"0\" /> President</br>");
+        out.println("<input type=\"checkbox\" name=\"role\" value=\"1\" /> Manager</br>");
+        out.println("<input type=\"checkbox\" name=\"role\" value=\"2\"  /> Team Leader</br>");
+        out.println("<input type=\"checkbox\" name=\"role\" value=\"3\"  /> Senior Developer</br>");
+        out.println("<input type=\"checkbox\" name=\"role\" value=\"4\"  /> Junior Developer");
+        out.println("</td></tr>");
+        out.println("</table>");
+        out.println("<table id=\"contactTable\"><tr><td>Contact Type</td><td>Contact Number</td><td></td></tr></table>");
+        out.println("<input type=\"submit\" " +
+                    "value=\""+request.getAttribute("action")+"\"/>");
+        out.println("</form>");
+        out.println("<button onclick=\"location.href = " +
+                    "'http://localhost:8080/home';\">Home</button>");
+        out.println("<button onclick=\"myFunction()\">Add Contact</button>");
+
+        out.println("<script>function myFunction() {var table = document.getElementById(\"contactTable\");");
+        out.println("var row = table.insertRow(-1);var cType = row.insertCell(0);var cNum = row.insertCell(1); var cAct = row.insertCell(2);");
+        out.println("cType.innerHTML =\"<select name='ctype'><option value=\\\"tel\\\">Telephone</option><option value=\\\"cell\\\">Cellphone</option></select>\";");
+        out.println("cNum.innerHTML=\"<input type=\\\"text\\\"/>\"; cAct.innerHTML =\"<button onclick=\\\"deleteRow(this)\\\">Try it</button>\"}");
+        out.println("function deleteRow(btn) {var row = btn.parentNode.parentNode;");
+        out.println("row.parentNode.removeChild(row);}</script>");
+
+
+
+
     }
 
 

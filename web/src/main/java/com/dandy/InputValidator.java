@@ -5,8 +5,13 @@ import java.util.InputMismatchException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import com.dandy.core.Gender;
 import com.dandy.core.Person;
+import com.dandy.core.Role;
+import com.dandy.core.RoleService;
 import org.apache.commons.validator.routines.DateValidator;
 import org.apache.commons.validator.routines.FloatValidator;
 import org.apache.commons.validator.routines.IntegerValidator;
@@ -70,6 +75,7 @@ public class InputValidator {
         String subdivision = (String) request.getParameter("subdivision");
         String city = (String) request.getParameter("city");
         String zipcode = (String) request.getParameter("zipcode");
+        
 
         person.setTitle(title);
         person.setFirstName(firstname);
@@ -86,6 +92,19 @@ public class InputValidator {
         person.getAddress().setSubdivision(subdivision);
         person.getAddress().setCity(city); 
         person.getAddress().setZipcode(integerChecker(zipcode));
+        RoleService roleService = new RoleService();
+        List<Role> roles = roleService.getRoles();
+
+//        String[] ctypes = request.getParameter("ctype");
+ //       System.out.println("YYYYYYYYYYY"+ ctypes.length);
+        String[] results = request.getParameterValues("role");
+        Set<Role> newRoles = new HashSet<Role>();
+        if(results!=null) {
+            for (int i = 0; i < results.length; i++) {
+                newRoles.add(roles.get(Integer.valueOf(results[i])));
+            }
+        }
+        person.setRoles(newRoles);
 
         return person;
 

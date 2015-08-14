@@ -30,6 +30,7 @@ public class AddPerson extends HttpServlet {
         out.println("<html>");
         out.println("<head><meta http-equiv='Content-Type'" + 
                     "content='text/html; charset=UTF-8'>");
+        request.setAttribute("action" , "Save");
         if(request.getAttribute("flags") != null) {
             boolean flags = (Boolean) request.getAttribute("flags");
             if(!flags) {
@@ -41,12 +42,6 @@ public class AddPerson extends HttpServlet {
         out.println("<table>");
         out.println("<form name=\"saveForm\" method=\"post\" action=\"addPerson\">");
         display.paramInputs(request, out);
-        out.println("<tr><td><input type=\"submit\" " +
-                    "value=\"Save\"/></td>");
-        out.println("</form>");
-        out.println("<td><button onclick=\"location.href = " +
-                    "'http://localhost:8080/home';\">Home</button></td></tr>");
-        out.println("</table>");
         out.println("</body></html>");
     }
 
@@ -71,7 +66,7 @@ public class AddPerson extends HttpServlet {
                     doGet(request, response);
         }else{
 
-        flags = personService.addPerson(person);
+        flags = true;//personService.addPerson(person);
         if (!flags) {
         request.setAttribute("flags", flags);
             doGet(request, response);
