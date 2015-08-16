@@ -4,12 +4,36 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
-<servlet>
-<servlet-name>Home</servlet-name>
-<servlet-class>com.dandy.HomeServlet</servlet-class>
-</servlet>
-<servlet-mapping>
+  <servlet>
+    <servlet-name>Home</servlet-name>
+    <servlet-class>com.dandy.HomeServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>add</servlet-name>
+    <servlet-class>com.dandy.AddPerson</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>delete</servlet-name>
+    <servlet-class>com.dandy.DeletePersonServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>update</servlet-name>
+    <servlet-class>com.dandy.EditPersonServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
     <servlet-name>Home</servlet-name>
     <url-pattern>/home</url-pattern>
-</servlet-mapping>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>add</servlet-name>
+    <url-pattern>/addPerson</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>delete</servlet-name>
+    <url-pattern>/deletePerson</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>update</servlet-name>
+    <url-pattern>/editPerson</url-pattern>
+  </servlet-mapping>
 </web-app>

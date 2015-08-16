@@ -7,13 +7,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.annotation.WebServlet;
 
 import com.dandy.core.Person;
 import com.dandy.core.PersonService;
 
 
-@WebServlet("/deletePerson")
 public class DeletePersonServlet extends HttpServlet {
 
     @Override

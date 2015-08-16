@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.annotation.WebServlet;
 
 import com.dandy.core.Gender;
 import com.dandy.core.Person;
@@ -16,7 +15,6 @@ import com.dandy.core.Address;
 import com.dandy.core.PersonService;
 
 
-@WebServlet("/addPerson")
 public class AddPerson extends HttpServlet {
 
     @Override
@@ -39,8 +37,8 @@ public class AddPerson extends HttpServlet {
         }
         out.println("<title>Servlet Activity</title></head><body>");
         out.println("<h1 align=\"center\">Servlet Activity</h1>");
-        out.println("<table>");
         out.println("<form name=\"saveForm\" method=\"post\" action=\"addPerson\">");
+        out.println("<table align='center'>");
         display.paramInputs(request, out);
         out.println("</body></html>");
     }
@@ -57,24 +55,22 @@ public class AddPerson extends HttpServlet {
         person.setAddress(address);
         address.setPerson(person);
         boolean flags = true;
-        person = inputValidator.personCheck(request,person);       
+        person = inputValidator.personCheck(request,person); 
+                    request.setAttribute("person", person);       
         if (person.getFirstName().trim().length() == 0 ||
             person.getMiddleName().trim().length() == 0 ||
             person.getLastName().trim().length() == 0 ||
-            person.getBirthday() == null) {
-                    request.setAttribute("person", person); 
-                    doGet(request, response);
+            person.getBirthday() == null || person.getGwa() == 0) {
+                request.setAttribute("flags", false);
+                doGet(request, response);
         }else{
-
-        flags = true;//personService.addPerson(person);
-        if (!flags) {
-        request.setAttribute("flags", flags);
-            doGet(request, response);
-        } else {
-        response.sendRedirect("/home");
+            flags = personService.addPerson(person);
+            if (!flags) {
+                request.setAttribute("flags", flags);
+                doGet(request, response);
+            } else {
+                response.sendRedirect("/home");
+            }
         }
-        }
-
     }
-    
 }
