@@ -59,11 +59,11 @@ public class Person {
     @PrimaryKeyJoinColumn
     private Address address;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.LAZY)
     @JoinColumn(name = "personId", nullable = false)
     private Set<Contact> contacts;
 
-    @ManyToMany(fetch=FetchType.EAGER)
+    @ManyToMany(fetch=FetchType.LAZY)
     @JoinTable(name="personroles", 
                 joinColumns={@JoinColumn(name="personId")}, 
                 inverseJoinColumns={@JoinColumn(name="roleId")})

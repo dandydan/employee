@@ -23,7 +23,7 @@ public class GetCommand<T> implements DbCommand {
         if(type == Person.class) {
             setPerson(session);
         }else{
-        this.t = (T) session.get(type, id);
+            this.t = (T) session.get(type, id);
         }
     }
 
@@ -31,6 +31,7 @@ public class GetCommand<T> implements DbCommand {
         Criteria crit = session.createCriteria(Person.class, "person");
         crit.add(Restrictions.eq("person.personId", id));
         crit.setFetchMode("contacts", FetchMode.JOIN);
+        crit.setFetchMode("roles", FetchMode.JOIN);
         crit.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
         t = (T) crit.uniqueResult();
     }

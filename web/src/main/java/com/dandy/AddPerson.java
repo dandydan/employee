@@ -32,7 +32,7 @@ public class AddPerson extends HttpServlet {
         if(request.getAttribute("flags") != null) {
             boolean flags = (Boolean) request.getAttribute("flags");
             if(!flags) {
-                out.println("<script> alert(\"Not Save\");</script>");
+                out.println("<script> alert(\"Not Saved\");</script>");
             }
         }
         out.println("<title>Servlet Activity</title></head><body>");

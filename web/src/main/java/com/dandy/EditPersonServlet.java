@@ -30,7 +30,7 @@ public class EditPersonServlet extends HttpServlet {
         if(request.getAttribute("flags") != null) {
             boolean flags = (Boolean) request.getAttribute("flags");
             if(!flags) {
-                out.println("<script> alert(\"Not Update\");</script>");
+                out.println("<script> alert(\"Can't Update\");</script>");
             }
         }
         out.println("<title>Servlet Activity</title></head><body>");
