@@ -17,6 +17,7 @@ import com.dandy.core.PersonService;
 import org.apache.commons.validator.routines.DateValidator;
 import org.apache.commons.validator.routines.FloatValidator;
 import org.apache.commons.validator.routines.IntegerValidator;
+import org.apache.commons.validator.routines.LongValidator;
 import javax.servlet.http.HttpServletRequest;
 
 public class InputValidator {
@@ -126,10 +127,12 @@ public class InputValidator {
     }
 
    public long longFormat(String contactNumber) {
-        if(contactNumber == "") {
-            return (long) 0;
+        LongValidator longValidator = new LongValidator();
+        Long contact = null;
+        if((contact=longValidator.validate(contactNumber)) != null) {
+            return (long) contact;
         } else {
-            return Long.valueOf(contactNumber);
+            return (long) 0;
         }
     }
 

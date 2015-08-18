@@ -24,13 +24,14 @@ public class AddPerson extends HttpServlet {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
         Display display = new Display();
+        HttpSession session = request.getSession(true);
         out.println("<!DOCTYPE html>");
         out.println("<html>");
         out.println("<head><meta http-equiv='Content-Type'" + 
                     "content='text/html; charset=UTF-8'>");
         request.setAttribute("action" , "Save");
-        if(request.getAttribute("flags") != null) {
-            boolean flags = (Boolean) request.getAttribute("flags");
+        if(session.getAttribute("flags") != null) {
+            boolean flags = (Boolean) session.getAttribute("flags");
             if(!flags) {
                 out.println("<script> alert(\"Not Saved\");</script>");
             }
@@ -39,7 +40,12 @@ public class AddPerson extends HttpServlet {
         out.println("<h1 align=\"center\">Servlet Activity</h1>");
         out.println("<form name=\"saveForm\" method=\"post\" action=\"addPerson\">");
         out.println("<table align='center'>");
-        display.paramInputs(request, out);
+        display.paramInputs(request, out, session);
+
+        if(session!=null) {
+            session.invalidate();
+        }
+
         out.println("</body></html>");
     }
 
@@ -52,22 +58,23 @@ public class AddPerson extends HttpServlet {
         PersonService personService = new PersonService();
         Person person = new Person();        
         Address address = new Address();
+        HttpSession session = request.getSession(true);
         person.setAddress(address);
         address.setPerson(person);
         boolean flags = true;
         person = inputValidator.personCheck(request,person); 
-                    request.setAttribute("person", person);       
+                    session.setAttribute("person", person);       
         if (person.getFirstName().trim().length() == 0 ||
             person.getMiddleName().trim().length() == 0 ||
             person.getLastName().trim().length() == 0 ||
             person.getBirthday() == null || person.getGwa() == 0) {
-                request.setAttribute("flags", false);
-                doGet(request, response);
+                session.setAttribute("flags", false);
+                response.sendRedirect("/addPerson");
         }else{
             flags = personService.addPerson(person);
             if (!flags) {
-                request.setAttribute("flags", flags);
-                doGet(request, response);
+                session.setAttribute("flags", flags);
+                response.sendRedirect("/addPerson");
             } else {
                 response.sendRedirect("/home");
             }

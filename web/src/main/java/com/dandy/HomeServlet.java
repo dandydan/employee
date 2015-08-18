@@ -16,10 +16,16 @@ public class HomeServlet extends HttpServlet {
                       throws ServletException, IOException {
         response.setContentType("text/html");
         Display display = new Display();
-        String field = display.valueCheck(request.getParameter("field"));
-        String searchText = display.valueCheck(request.getParameter("searchText"));
-        String order = display.valueCheck(request.getParameter("order"));
-        String gwa = display.valueCheck(request.getParameter("gwa"));
+
+        HttpSession session = request.getSession(true);
+        String field = display.valueCheck((String)session.getAttribute("field"));
+        String searchText = display.valueCheck((String)session.getAttribute("searchText"));
+        String order = display.valueCheck((String)session.getAttribute("order"));
+        String gwa = display.valueCheck((String)session.getAttribute("gwa"));
+        
+        if(session!=null) {
+            session.invalidate();
+        }
 
         PrintWriter out = response.getWriter();
         out.println("<!DOCTYPE html>");
@@ -52,7 +58,7 @@ public class HomeServlet extends HttpServlet {
         out.println("<input type=\"hidden\" id='order' name=\"order\" value=\"personId\"/>");
         out.println("<input type=\"hidden\" id='gwa' name=\"gwa\" value=\"\"/>");
         out.println("<b>Sort:</b> <input style='height:20px; width:100px' "+
-                    "type=\"submit\" value=\"View All\" oncLick=\"myOrder(this)\"/>");
+                    "type=\"submit\" value=\"ID\" oncLick=\"myOrder(this)\"/>");
         out.println("<input style='height:20px; width:100px' type=\"submit\""+
                     " value=\"Lastname\" oncLick=\"myOrder(this)\"/>");
         out.println("<input style='height:20px; width:100px' type=\"submit\""+
@@ -87,6 +93,11 @@ public class HomeServlet extends HttpServlet {
     public void doPost(HttpServletRequest request,
                       HttpServletResponse response)
                       throws ServletException, IOException {
-        doGet(request, response);
+        HttpSession session = request.getSession(true);
+        session.setAttribute("field", request.getParameter("field"));
+        session.setAttribute("searchText", request.getParameter("searchText"));
+        session.setAttribute("order", request.getParameter("order"));
+        session.setAttribute("gwa", request.getParameter("gwa"));
+        response.sendRedirect("/home");
     }
 }

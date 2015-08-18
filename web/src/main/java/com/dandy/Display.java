@@ -25,8 +25,8 @@ import java.util.Date;
 
 public class Display {
 
-    public void paramInputs(HttpServletRequest request, PrintWriter out) {
-        Person person = (Person) request.getAttribute("person");
+    public void paramInputs(HttpServletRequest request, PrintWriter out, HttpSession session) {
+        Person person = (Person) session.getAttribute("person");
         String male = "";
         String female = "";
         String undecided = "";
